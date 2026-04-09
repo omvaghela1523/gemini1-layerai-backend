@@ -1,0 +1,18 @@
+{
+  "name": "layerai-backend",
+  "version": "1.0.0",
+  "description": "LayerAI Backend with Google Gemini AI",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
