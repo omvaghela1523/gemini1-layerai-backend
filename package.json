@@ -1,12 +1,20 @@
 {
-  "name": "layerai-psd",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "layerai-backend",
+  "version": "2.0.0",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "ag-psd": "^18.3.2",
+    "canvas": "^2.11.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
