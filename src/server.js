@@ -83,7 +83,7 @@ app.post("/extract-subject", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No image uploaded" });
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const imagePart = {
       inlineData: {
@@ -128,7 +128,7 @@ app.post("/analyze-video", async (req, res) => {
     const { description } = req.body;
     if (!description) return res.status(400).json({ error: "Send a 'description' field" });
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const prompt = `You are an expert video editor and After Effects specialist.
 Analyze this video description and return ONLY valid JSON, no markdown, no backticks:
