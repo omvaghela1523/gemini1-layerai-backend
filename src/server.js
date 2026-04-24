@@ -157,5 +157,51 @@ app.post("/analyze-video", async (req, res) => {
   }
 });
 
+app.post("/detect-text", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "No image uploaded" });
+    const base64Image = req.file.buffer.toString("base64");
+    const mimeType = req.file.mimetype;
+    const message = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1500,
+      messages: [{ role: "user", content: [
+        { type: "image", source: { type: "base64", media_type: mimeType, data: base64Image } },
+        { type: "text", text: `Look at this image and find ALL visible text. For each piece of text, give its approximate position.
+
+Return ONLY valid JSON with no extra text:
+{
+  "status": "success",
+  "texts": [
+    {
+      "text": "the exact text you see",
+      "x": 100,
+      "y": 200,
+      "w": 300,
+      "h": 40
+    }
+  ],
+  "full_text": "all text combined"
+}
+
+RULES:
+- x, y = top-left corner position in PIXELS (estimate based on image dimensions)
+- w = width of the text area in pixels
+- h = height of the text area in pixels
+- Include ALL text you can see: titles, subtitles, captions, watermarks, labels, buttons, signs
+- If NO text is found, return: {"status": "success", "texts": [], "full_text": ""}
+- Estimate positions as accurately as possible based on where text appears in the image
+- The image dimensions are provided by the upload, use them to estimate pixel positions` }
+      ]}]
+    });
+    const text = message.content.map((b) => b.text || "").join("");
+    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+    res.json(parsed);
+  } catch (err) {
+    console.error("Detect text error:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`LayerAI Backend v2.0 running on port ${PORT}`));
